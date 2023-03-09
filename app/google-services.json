@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "18814968294",
+    "project_id": "paywavee",
+    "storage_bucket": "paywavee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18814968294:android:902a257ebc5b4915507627",
+        "android_client_info": {
+          "package_name": "com.francis.paywavee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "18814968294-q55rob9lahe6amascrvadc4ur49mlm4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTwC_pL2ZW1djVDkaH-DvexAYg3wv1TFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "18814968294-q55rob9lahe6amascrvadc4ur49mlm4r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
