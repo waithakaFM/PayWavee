@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.francis.paywavee.common.snackbar.SnackbarManager
 import com.francis.paywavee.ui.screens.accountsList.AccountsListScreen
+import com.francis.paywavee.ui.screens.add_edit.AddEditScreen
 import com.francis.paywavee.ui.screens.login.LoginScreen
 import com.francis.paywavee.ui.screens.settings.SettingsScreen
 import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
@@ -103,4 +104,13 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
 
     composable(PAY_ACCOUNTS) { AccountsListScreen(openScreen = { route -> appState.navigate(route) }) }
 
+    composable(
+        route = "$ADD_EDIT$ITEM_ID_ARG",
+        arguments = listOf(navArgument(ITEM_ID) { defaultValue = ITEM_DEFAULT_ID })
+    ) {
+        AddEditScreen(
+            popUpScreen = { appState.popUp() },
+            itemId = it.arguments?.getString(ITEM_ID) ?: ITEM_DEFAULT_ID
+        )
+    }
 }

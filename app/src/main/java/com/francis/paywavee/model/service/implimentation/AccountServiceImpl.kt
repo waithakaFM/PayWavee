@@ -2,7 +2,7 @@ package com.francis.paywavee.model.service.implimentation
 
 import com.francis.paywavee.model.User
 import com.francis.paywavee.model.service.services.AccountService
-import com.francis.paywavee.model.trace
+import com.francis.paywavee.model.service.trace
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.channels.awaitClose

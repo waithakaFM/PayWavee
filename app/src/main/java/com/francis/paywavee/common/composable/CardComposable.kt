@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.francis.paywavee.common.util.dropdownSelector
 
 @ExperimentalMaterialApi
 @Composable
@@ -67,4 +68,18 @@ fun DangerousCardEditor(
     onEditClick: () -> Unit
 ) {
     CardEditor(title, icon, content, onEditClick, MaterialTheme.colors.primary, modifier)
+}
+
+@Composable
+@ExperimentalMaterialApi
+fun CardSelector(
+    @StringRes label: Int,
+    options: List<String>,
+    selection: String,
+    modifier: Modifier,
+    onNewValue: (String) -> Unit
+) {
+    Card(backgroundColor = MaterialTheme.colors.onPrimary, modifier = modifier) {
+        DropdownSelector(label, options, selection, Modifier.dropdownSelector(), onNewValue)
+    }
 }

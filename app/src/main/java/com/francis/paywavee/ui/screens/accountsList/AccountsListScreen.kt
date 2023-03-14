@@ -33,7 +33,7 @@ fun AccountsListScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { },
+                onClick = { viewModel.onAddClick(openScreen) },
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 modifier = modifier.padding(16.dp)

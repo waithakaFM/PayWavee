@@ -1,5 +1,6 @@
 package com.francis.paywavee.ui.screens.accountsList
 
+import com.francis.paywavee.ADD_EDIT
 import com.francis.paywavee.SETTINGS_SCREEN
 import com.francis.paywavee.model.service.services.LogService
 import com.francis.paywavee.ui.screens.PayWaveViewModel
@@ -14,4 +15,8 @@ class AccountsListScreenViewModel @Inject constructor(
     fun onSettingsClick(
         openScreen: (String) -> Unit
     ) = openScreen(SETTINGS_SCREEN)
+
+    fun onAddClick(
+        openScreen: (String) -> Unit
+    ) = openScreen(ADD_EDIT)
 }
