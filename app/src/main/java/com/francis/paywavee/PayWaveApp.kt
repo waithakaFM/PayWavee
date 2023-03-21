@@ -1,20 +1,28 @@
 package com.francis.paywavee
 
 import android.content.res.Resources
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.francis.paywavee.common.snackbar.SnackbarManager
@@ -23,6 +31,7 @@ import com.francis.paywavee.ui.screens.add_edit.AddEditScreen
 import com.francis.paywavee.ui.screens.login.LoginScreen
 import com.francis.paywavee.ui.screens.settings.SettingsScreen
 import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
+import com.francis.paywavee.ui.screens.spending.SpendingScreen
 import com.francis.paywavee.ui.screens.splash.SplashScreen
 import com.francis.paywavee.ui.theme.PayWaveeTheme
 import kotlinx.coroutines.CoroutineScope
@@ -46,6 +55,31 @@ fun PayWaveApp() {
                             Snackbar(snackbarData, contentColor = MaterialTheme.colors.onPrimary)
                         }
                     )
+                },
+                bottomBar = {
+                            BottomNavBar(
+                                items = listOf(
+                                    BottomNavItem(
+                                        name = "Pay",
+                                        route = PAY_ACCOUNTS,
+                                        icon = painterResource(id = R.drawable.ic_account)
+                                    ),
+                                    BottomNavItem(
+                                        name = "Add",
+                                        route = "$ADD_EDIT$ITEM_ID_ARG",
+                                        icon = painterResource(id = R.drawable.ic_add_edit)
+                                    ),
+                                    BottomNavItem(
+                                        name = "Spending",
+                                        route = SPENDING_SCREEN,
+                                        icon = painterResource(id = R.drawable.ic_spendings)
+                                    ),
+                                ),
+                                navController = appState.navController,
+                                onItemClick = {
+                                    appState.navController.navigate(it.route)
+                                }
+                            )
                 },
                 scaffoldState = appState.scaffoldState
 
@@ -83,6 +117,7 @@ fun resources(): Resources {
 
 @ExperimentalMaterialApi
 fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
+    
     composable(SPLASH_SCREEN) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
@@ -104,6 +139,7 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
 
     composable(PAY_ACCOUNTS) { AccountsListScreen(openScreen = { route -> appState.navigate(route) }) }
 
+
     composable(
         route = "$ADD_EDIT$ITEM_ID_ARG",
         arguments = listOf(navArgument(ITEM_ID) { defaultValue = ITEM_DEFAULT_ID })
@@ -112,5 +148,50 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
             popUpScreen = { appState.popUp() },
             itemId = it.arguments?.getString(ITEM_ID) ?: ITEM_DEFAULT_ID
         )
+    }
+
+    composable(SPENDING_SCREEN){
+        SpendingScreen()
+    }
+}
+
+@Composable
+fun BottomNavBar(
+    items: List<BottomNavItem>,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavItem) -> Unit
+){
+    val backStackEntry = navController.currentBackStackEntryAsState()
+
+    BottomNavigation(
+        modifier = modifier,
+        backgroundColor = Color.DarkGray,
+        elevation = 5.dp
+    ) {
+        items.forEach{ item ->
+            val selected = item.route == backStackEntry.value?.destination?.route
+            BottomNavigationItem(
+                selected = selected,
+                onClick = {onItemClick(item)},
+                selectedContentColor = Color.Green,
+                unselectedContentColor = Color.Gray,
+                icon = {
+                    Column(horizontalAlignment = CenterHorizontally) {
+                        Icon(
+                            painter = item.icon,
+                            contentDescription = item.name
+                        )
+                        if (selected){
+                            Text(
+                                text = item.name,
+                                textAlign = TextAlign.Center,
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+            )
+        }
     }
 }

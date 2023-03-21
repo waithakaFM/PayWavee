@@ -1,17 +1,20 @@
 package com.francis.paywavee.ui.screens.accountsList
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.francis.paywavee.common.composable.ActionToolbar
 import com.francis.paywavee.common.util.smallSpacer
 import com.francis.paywavee.common.util.toolbarActions
@@ -29,6 +32,9 @@ fun AccountsListScreen(
     viewModel: AccountsListScreenViewModel = hiltViewModel()
 ) {
 
+    val itemList = viewModel
+        .items
+        .collectAsStateWithLifecycle(emptyList())
 
     Scaffold(
         floatingActionButton = {
@@ -42,7 +48,9 @@ fun AccountsListScreen(
             }
         }
     ) {
-        Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()) {
             ActionToolbar(
                 title = AppText.app_name,
                 modifier = Modifier.toolbarActions(),
@@ -52,16 +60,17 @@ fun AccountsListScreen(
 
             Spacer(modifier = Modifier.smallSpacer())
 
-//            LazyColumn {
-//                items(tasks.value, key = { it.id }) { taskItem ->
-//                    AccountListItem(
-//                        task = taskItem,
-//                        options = options,
-//                        onCheckChange = { viewModel.onTaskCheckChange(taskItem) },
-//                        onActionClick = { action -> viewModel.onTaskActionClick(openScreen, taskItem, action) }
-//                    )
-//                }
-//            }
+            LazyColumn{
+                items(itemList.value, key = {it.id}){ listItem ->
+                    AccountListItem(
+                        item = listItem,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.onItemClick(openScreen, listItem)
+                            }
+                    )
+                }
+            }
         }
     }
 }

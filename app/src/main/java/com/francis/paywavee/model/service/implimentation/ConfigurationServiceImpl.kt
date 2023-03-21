@@ -3,6 +3,7 @@ package com.francis.paywavee.model.service.implimentation
 import com.francis.paywavee.model.service.services.ConfigurationService
 import com.google.firebase.ktx.BuildConfig
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import kotlinx.coroutines.tasks.await
@@ -27,5 +28,12 @@ ConfigurationService{
      */
     override suspend fun fetchConfiguration(): Boolean {
         return remoteConfig.fetchAndActivate().await()
+    }
+
+    override val isShowPayButtonConfig: Boolean
+        get() = remoteConfig[SHOW_PAY_BUTTON_KEY].asBoolean()
+
+    companion object{
+        private const val SHOW_PAY_BUTTON_KEY = "show_pay_button"
     }
 }

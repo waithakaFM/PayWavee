@@ -6,6 +6,7 @@ const val LOGIN_SCREEN = "LoginScreen"
 const val SIGN_UP_SCREEN = "SignUpScreen"
 const val PAY_ACCOUNTS = "PayAccountsScreen"
 const val ADD_EDIT = "AddEditScreen"
+const val SPENDING_SCREEN ="SpendingScreen"
 
 const val ITEM_ID = "itemId"
 const val ITEM_DEFAULT_ID = "-1"

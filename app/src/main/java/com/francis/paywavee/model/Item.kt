@@ -8,5 +8,6 @@ data class Item(
     val entity: String = "",
     val payBill: String ="",
     val accountNumber: String = "",
-    val phoneNumber: String = ""
+    val phoneNumber: String = "",
+    val completed: Boolean = false
 )
