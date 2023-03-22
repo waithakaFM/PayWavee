@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.francis.paywavee.common.composable.ActionToolbar
 import com.francis.paywavee.common.util.smallSpacer
 import com.francis.paywavee.common.util.toolbarActions
+import com.francis.paywavee.ui.screens.custom_dialog.CustomDialog
 import com.francis.paywavee.R.string as AppText
 import com.francis.paywavee.R.drawable as AppIcon
 
@@ -48,7 +49,8 @@ fun AccountsListScreen(
             }
         }
     ) {
-        Column(modifier = Modifier
+        Column(
+            modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
             ActionToolbar(
@@ -61,15 +63,26 @@ fun AccountsListScreen(
             Spacer(modifier = Modifier.smallSpacer())
 
             LazyColumn{
-                items(itemList.value, key = {it.id}){ listItem ->
+                items(itemList.value){ listItem ->
                     AccountListItem(
                         item = listItem,
                         modifier = Modifier
                             .clickable {
                                 viewModel.onItemClick(openScreen, listItem)
-                            }
+                            },
+                        onPayClick = { viewModel.onPayClick() }
                     )
                 }
+            }
+            if(viewModel.isDialogShown){
+                CustomDialog(
+                    onDismiss = {
+                        viewModel.onDismissDialog()
+                    },
+                    onConfirm = {
+                        //viewmodel.buyItem()
+                    }
+                )
             }
         }
     }

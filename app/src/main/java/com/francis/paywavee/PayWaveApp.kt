@@ -180,7 +180,7 @@ fun BottomNavBar(
                     Column(horizontalAlignment = CenterHorizontally) {
                         Icon(
                             painter = item.icon,
-                            contentDescription = item.name
+                            contentDescription = item.name,
                         )
                         if (selected){
                             Text(

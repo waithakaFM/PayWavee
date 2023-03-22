@@ -1,5 +1,8 @@
 package com.francis.paywavee.ui.screens.accountsList
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.francis.paywavee.ADD_EDIT
 import com.francis.paywavee.ITEM_ID
 import com.francis.paywavee.SETTINGS_SCREEN
@@ -43,6 +46,18 @@ class AccountsListScreenViewModel @Inject constructor(
     fun onAddClick(
         openScreen: (String) -> Unit
     ) = openScreen(ADD_EDIT)
+
+
+    var isDialogShown by mutableStateOf(false)
+        private set
+
+    fun onPayClick(){
+        isDialogShown = true
+    }
+
+    fun onDismissDialog(){
+        isDialogShown = false
+    }
 
     private fun onDeleteTaskClick(item: Item){
         launchCatching { storageService.delete(item.id) }
