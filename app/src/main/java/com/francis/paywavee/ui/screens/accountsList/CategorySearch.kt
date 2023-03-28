@@ -1,6 +1,7 @@
-package com.francis.paywavee.model
+package com.francis.paywavee.ui.screens.accountsList
 
-enum class Category() {
+enum class CategorySearch() {
+    All,
     Utilities,
     Rent,
     Food,
@@ -10,14 +11,6 @@ enum class Category() {
     Others;
 
     companion object {
-        fun getByName( name: String?): Category{
-            values().forEach { category ->
-                if (name == category.name)
-                    return category
-            }
-            return Utilities
-        }
-
         fun getOptions(): List<String>{
             val options = mutableListOf<String>()
             values().forEach { category ->

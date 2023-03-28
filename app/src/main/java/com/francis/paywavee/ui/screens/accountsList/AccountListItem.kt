@@ -32,7 +32,7 @@ fun AccountListItem(
         backgroundColor = MaterialTheme.colors.background,
         modifier = modifier
             .padding(8.dp, 0.dp, 8.dp, 8.dp),
-        elevation = 10.dp
+        elevation = 10.dp,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -1,5 +1,6 @@
 package com.francis.paywavee.ui.screens.accountsList
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,8 @@ import com.francis.paywavee.model.service.services.LogService
 import com.francis.paywavee.model.service.services.StorageService
 import com.francis.paywavee.ui.screens.PayWaveViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,15 +24,14 @@ class AccountsListScreenViewModel @Inject constructor(
     private val configurationService: ConfigurationService
 ) : PayWaveViewModel(logService) {
 
-    val items = storageService.items
-
     fun onSettingsClick(
         openScreen: (String) -> Unit
     ) = openScreen(SETTINGS_SCREEN)
 
-    fun onClickPayBtn(){
+    val items = storageService.items
 
-    }
+    fun onCategoryChange(category: String)  = storageService.queryItem(category)
+
 
     fun onItemCheckChange(item: Item){
         launchCatching {
@@ -47,17 +49,6 @@ class AccountsListScreenViewModel @Inject constructor(
         openScreen: (String) -> Unit
     ) = openScreen(ADD_EDIT)
 
-
-    var isDialogShown by mutableStateOf(false)
-        private set
-
-    fun onPayClick(){
-        isDialogShown = true
-    }
-
-    fun onDismissDialog(){
-        isDialogShown = false
-    }
 
     private fun onDeleteTaskClick(item: Item){
         launchCatching { storageService.delete(item.id) }

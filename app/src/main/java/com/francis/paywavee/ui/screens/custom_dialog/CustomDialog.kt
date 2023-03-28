@@ -1,20 +1,22 @@
 package com.francis.paywavee.ui.screens.custom_dialog
 
+import android.content.Entity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -27,6 +29,9 @@ import com.francis.paywavee.R.drawable as AppImage
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomDialog(
+    entity: String,
+    paybill:String,
+    account:String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ){
@@ -52,7 +57,7 @@ fun CustomDialog(
                 verticalArrangement = Arrangement.spacedBy(25.dp)
             ) {
                 Text(
-                    text = "Your selected items. Please select mode of payment",
+                    text = "Make your payment to $entity",
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center
                 )
@@ -64,40 +69,36 @@ fun CustomDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Oppo a53")
-                        Text(text = "ksh 99000")
+                        Text(text = "PayBill")
+                        Text(text = paybill, fontWeight = FontWeight.SemiBold)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Oppo a53")
-                        Text(text = "ksh 99000")
+                        Text(text = "Account")
+                        Text(text = account, fontWeight = FontWeight.SemiBold)
                     }
                     Divider()
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "Total", fontWeight = FontWeight.Bold)
-                        Text(text = "ksh 99000", fontWeight = FontWeight.Bold)
+                    var amount by remember {
+                        mutableStateOf("")
                     }
+                    OutlinedTextField(
+                        value = amount,
+                        onValueChange = { amount = it }, modifier = Modifier.padding(8.dp),
+                        label = { Text("Amount") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceAround
                     ){
+                        Text(text = "Pay with ")
                         Image(
-                            painter = painterResource(id = AppImage.kalma),
-                            contentDescription = "Pay",
-                            modifier = Modifier
-                                .fillMaxWidth(0.25f)
-                                .clip(RoundedCornerShape(15.dp))
-                                .clickable { }
-                        )
-                        Image(
-                            painter = painterResource(id = AppImage.kalma),
+                            painter = painterResource(id = AppImage.mpesa),
                             contentDescription = "Paypal",
                             modifier = Modifier
                                 .fillMaxWidth(0.25f)

@@ -17,17 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.*
+import androidx.navigation.compose.*
 import com.francis.paywavee.common.snackbar.SnackbarManager
 import com.francis.paywavee.ui.screens.accountsList.AccountsListScreen
 import com.francis.paywavee.ui.screens.add_edit.AddEditScreen
+import com.francis.paywavee.ui.screens.custom_dialog.CustomDialog
 import com.francis.paywavee.ui.screens.login.LoginScreen
 import com.francis.paywavee.ui.screens.settings.SettingsScreen
 import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
@@ -137,7 +132,12 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
         SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
-    composable(PAY_ACCOUNTS) { AccountsListScreen(openScreen = { route -> appState.navigate(route) }) }
+    composable(PAY_ACCOUNTS) {
+        AccountsListScreen(openScreen = { route -> appState.navigate(route) }){
+            appState.navController
+                .navigate(PAY_DIALOG + "?entity=${it.entity}"+"?paybill=${it.payBill}"+"?account=${it.accountNumber}")
+        }
+    }
 
 
     composable(
@@ -152,6 +152,27 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
 
     composable(SPENDING_SCREEN){
         SpendingScreen()
+    }
+
+    dialog(
+        "$PAY_DIALOG?entity={entity}?paybill={paybill}?account={account}", arguments = listOf(
+            navArgument("entity"){
+                type = NavType.StringType },
+            navArgument("paybill"){
+                type = NavType.StringType },
+            navArgument("account"){
+                type = NavType.StringType }
+        )){ navBackStackEntry ->
+        val entity =   navBackStackEntry.arguments?.getString("entity")!!
+        val paybill =   navBackStackEntry.arguments?.getString("paybill")!!
+        val account =   navBackStackEntry.arguments?.getString("account")!!
+        CustomDialog(
+            entity = entity,
+            paybill = paybill,
+            account =account ,
+            onDismiss = { appState.navController.popBackStack()}) {
+
+        }
     }
 }
 

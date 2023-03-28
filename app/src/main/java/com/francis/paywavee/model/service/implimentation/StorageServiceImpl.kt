@@ -32,10 +32,14 @@ class StorageServiceImpl @Inject constructor(
         get() =
             auth.currentUser.flatMapLatest { user ->
                 currentCollection(user.id)
+                    .orderBy("entity")
                     .snapshots()
                     .map { snapshot -> snapshot.toObjects() }
             }
 
+    /**
+     * Gets the item to update
+     */
     override suspend fun getItem(itemId: String): Item? =
         currentCollection(auth.currentUserId)
             .document(itemId)
@@ -43,7 +47,20 @@ class StorageServiceImpl @Inject constructor(
             .await()
             .toObject()
 
+    /**
+     * Query Items from the database
+     */
+    override fun queryItem(category: String): Flow<List<Item>> {
+        return currentCollection(auth.currentUserId)
+            .whereEqualTo("category", category)
+            .snapshots()
+            .map { snapshot -> snapshot.toObjects() }
+    }
 
+
+    /**
+     * save the items into fireStore
+     */
     override suspend fun save(item: Item): String =
         trace(SAVE_ITEM_TRACE) {
             currentCollection(auth.currentUserId)
@@ -52,6 +69,9 @@ class StorageServiceImpl @Inject constructor(
                 .id
         }
 
+    /**
+     * Updates the item to update
+     */
     override suspend fun update(item: Item): Unit =
         trace(UPDATE_ITEM_TRACE){
             currentCollection(auth.currentUserId)
@@ -60,6 +80,9 @@ class StorageServiceImpl @Inject constructor(
                 .await()
         }
 
+    /**
+     * Delete the selected item
+     */
     override suspend fun delete(itemId: String) {
         currentCollection(auth.currentUserId)
             .document(itemId)
@@ -67,12 +90,16 @@ class StorageServiceImpl @Inject constructor(
             .await()
     }
 
+    /**
+     * Deletes all the users collection after he has logged out the app
+     */
     // TODO: It's not recommended to delete on the client:
     // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
     override suspend fun deleteAllForUser(userId: String) {
         val matchingTasks = currentCollection(userId).get().await()
         matchingTasks.map { it.reference.delete().asDeferred() }.awaitAll()
     }
+
 
     private fun currentCollection(uid: String): CollectionReference =
         firestore.collection(USER_COLLECTION)
