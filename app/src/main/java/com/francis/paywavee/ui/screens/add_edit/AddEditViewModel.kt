@@ -1,8 +1,11 @@
 package com.francis.paywavee.ui.screens.add_edit
 
-import androidx.compose.runtime.getValue
+import android.widget.Toast
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import com.francis.paywavee.ITEM_DEFAULT_ID
+import com.francis.paywavee.R
+import com.francis.paywavee.common.snackbar.SnackbarManager
 import com.francis.paywavee.common.util.idFromParameter
 import com.francis.paywavee.model.Item
 import com.francis.paywavee.model.service.services.LogService
@@ -50,12 +53,19 @@ class AddEditViewModel @Inject constructor(
     fun onDoneClick( popUpScreen: () -> Unit){
         launchCatching {
             val editedItem = item.value
-            if (editedItem.id.isBlank()){
-                storageService.save(editedItem)
-            }else{
-                storageService.update(editedItem)
+            if (
+                editedItem.entity.isBlank() ||
+                editedItem.accountNumber.isBlank() ||
+                editedItem.phoneNumber.isBlank() || editedItem.accountNumber.isBlank()){
+                SnackbarManager.showMessage(R.string.empty_fields)
+            }else {
+                if (editedItem.id.isBlank()){
+                    storageService.save(editedItem)
+                }else{
+                    storageService.update(editedItem)
+                }
+                popUpScreen()
             }
-            popUpScreen()
         }
     }
 

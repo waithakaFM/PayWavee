@@ -118,6 +118,10 @@ dependencies {
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
 
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    // daraja api
+    implementation 'com.github.Carrieukie:android_mpesa_stk:1.0.3-alpha'
+
 }
 
 kapt {

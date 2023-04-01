@@ -15,6 +15,11 @@ ConfigurationService{
     private val remoteConfig
         get() = Firebase.remoteConfig
 
+    /**
+     * this code is wrapped inside an if condition that checks if the app is in debug mode,
+     * because short intervals should only be configured for testing
+     */
+
     init {
         if (BuildConfig.DEBUG) {
             val configSettings = remoteConfigSettings { minimumFetchIntervalInSeconds = 0 }
@@ -30,10 +35,10 @@ ConfigurationService{
         return remoteConfig.fetchAndActivate().await()
     }
 
-    override val isShowPayButtonConfig: Boolean
-        get() = remoteConfig[SHOW_PAY_BUTTON_KEY].asBoolean()
+    override val isShowDropDownConfig: Boolean
+        get() = remoteConfig[SHOW_DROP_DOWN_KEY].asBoolean()
 
     companion object{
-        private const val SHOW_PAY_BUTTON_KEY = "show_pay_button"
+        private const val SHOW_DROP_DOWN_KEY = "show_drop_down"
     }
 }

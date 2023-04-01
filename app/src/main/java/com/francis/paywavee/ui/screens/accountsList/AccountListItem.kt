@@ -1,42 +1,89 @@
 package com.francis.paywavee.ui.screens.accountsList
 
-import androidx.compose.foundation.background
+
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.francis.paywavee.R
-import com.francis.paywavee.common.composable.DialogButton
 import com.francis.paywavee.model.Item
-import java.lang.StringBuilder
+
 
 @Composable
 @ExperimentalMaterialApi
 fun AccountListItem(
     item: Item,
     modifier: Modifier = Modifier,
-    onPayClick: () -> Unit
+    onPayClick: () -> Unit,
+    dropDownItems: List<String>,
+    onOptionClick: (String) -> Unit
 ) {
+
+    var isContextMenuVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var pressOffset by remember{
+        mutableStateOf(DpOffset.Zero)
+    }
+    var itemHeight by remember {
+        mutableStateOf(0.dp)
+    }
+
+    val  density = LocalDensity.current
+
+    // User interaction and can be used to show a repeal effect on that position
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+
+
     Card(
         backgroundColor = MaterialTheme.colors.background,
-        modifier = modifier
-            .padding(8.dp, 0.dp, 8.dp, 8.dp),
         elevation = 10.dp,
+        modifier = modifier
+            .padding(8.dp, 0.dp, 8.dp, 8.dp)
+            .onSizeChanged {
+                itemHeight = with(density) {it.height.toDp()}
+            },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier
+                .fillMaxWidth()
+                .indication(interactionSource, LocalIndication.current)
+                .pointerInput(true) {
+                    detectTapGestures(
+                        onLongPress = {
+                            isContextMenuVisible = true
+                            pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
+                        },
+                        onPress = {
+                            val press = PressInteraction.Press(it)
+                            interactionSource.emit(press)
+                            tryAwaitRelease()
+                            interactionSource.emit(PressInteraction.Release(press))
+                        }
+                    )
+                }
+                .padding(4.dp)
         ) {
             Column(modifier = modifier
                 .weight(1f)
@@ -72,6 +119,22 @@ fun AccountListItem(
                     textAlign = TextAlign.Center,
                     fontSize = 15.sp
                 )
+            }
+        }
+        DropdownMenu(
+            expanded = isContextMenuVisible,
+            onDismissRequest = { isContextMenuVisible = false},
+            offset = pressOffset.copy(
+                y = pressOffset.y - itemHeight
+            )
+        ) {
+            dropDownItems.forEach{ option ->
+                DropdownMenuItem(onClick = {
+                    onOptionClick(option)
+                    isContextMenuVisible = false
+                }) {
+                    Text(text = option)
+                }
             }
         }
     }

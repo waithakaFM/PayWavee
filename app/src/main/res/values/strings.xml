@@ -30,7 +30,12 @@
     <string name="sign_out_title">Sign out?</string>
     <string name="sign_out_description">You will have to sign in again to see your tasks.</string>
     <string name="delete_account_title">Delete account?</string>
-    <string name="delete_account_description">You will lose all your tasks and your account will be deleted. This action is irreversible.</string>
+    <string name="delete_account_description">You will lose all your items and your account will be deleted. This action is irreversible.</string>
+    <string name="amount">Amount</string>
+    <string name="enter_pin">Your request has been received, a pop up will show up once all details are confirmed. Thank you</string>
+
+    <!-- listItem screen -->
+    <string name="delete_item">This entity will be deleted. This action is irreversible.</string>
 
     <!--    AddEdit screen-->
     <string name="add_edit">Add or Edit</string>
@@ -39,5 +44,6 @@
     <string name="acc_no">Account Number</string>
     <string name="phone_no">Phone Number</string>
     <string name="category">Category</string>
+    <string name="empty_fields">Add information to be saved. The fields must not be empty </string>
 
 </resources>

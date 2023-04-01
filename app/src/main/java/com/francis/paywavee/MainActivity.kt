@@ -1,9 +1,5 @@
 package com.francis.paywavee
 
-/**
- * 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
- */
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

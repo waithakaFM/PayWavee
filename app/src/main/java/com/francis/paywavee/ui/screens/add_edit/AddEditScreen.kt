@@ -14,10 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.francis.paywavee.common.composable.ActionToolbar
-import com.francis.paywavee.common.composable.BasicField
-import com.francis.paywavee.common.composable.CardSelector
-import com.francis.paywavee.common.composable.NumberField
+import com.francis.paywavee.common.composable.*
 import com.francis.paywavee.common.util.card
 import com.francis.paywavee.common.util.fieldModifier
 import com.francis.paywavee.common.util.spacer
@@ -64,7 +61,7 @@ fun AddEditScreen(
         BasicField(text = AppText.entity, value = item.entity,  viewModel::onEntityChange, fieldModifier)
         NumberField(text = AppText.payBill, value = item.payBill, viewModel::onPayBillChange, fieldModifier)
         BasicField(text = AppText.acc_no, value = item.accountNumber,  viewModel::onAccountNumberChange, fieldModifier)
-        NumberField(text = AppText.phone_no, value = item.phoneNumber,  viewModel::onPhoneNumberChange, fieldModifier)
+        PhoneNumber(text = AppText.phone_no, value = item.phoneNumber,  viewModel::onPhoneNumberChange, fieldModifier)
 
         Spacer(modifier = Modifier.spacer())
 

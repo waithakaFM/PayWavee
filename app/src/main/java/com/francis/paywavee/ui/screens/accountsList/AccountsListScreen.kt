@@ -1,10 +1,7 @@
 package com.francis.paywavee.ui.screens.accountsList
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -18,16 +15,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.francis.paywavee.common.composable.ActionToolbar
 import com.francis.paywavee.common.util.smallSpacer
 import com.francis.paywavee.common.util.toolbarActions
 import com.francis.paywavee.model.Item
+import com.francis.paywavee.model.service.mpesa.darajaDriver
+import com.francis.paywavee.model.service.mpesa.darajaSTK
 import com.francis.paywavee.ui.theme.ButtonBlue
 import com.francis.paywavee.ui.theme.DarkerButtonBlue
 import com.francis.paywavee.ui.theme.TextWhite
@@ -89,45 +86,28 @@ fun AccountsListScreen(
                 }
             )
             Spacer(modifier = Modifier.smallSpacer())
-            Items(
-                items =if(categoryValue.value == "All") itemList.value else queryList.value,
-                onItemClick = {
-                    viewModel.onItemClick(openScreen, it)
-                },
-                onPayClick = {
-                    onPayClick(it)
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 80.dp)
+            ) {
+                items(if(categoryValue.value == "All") itemList.value else queryList.value,
+                    key = { it.id }
+                ) { listItem ->
+                    AccountListItem(
+                        item = listItem,
+                        onPayClick = {
+                            onPayClick(listItem)
+                        },
+                        dropDownItems = ItemDropDown.getOptions(true),
+                        onOptionClick = { action ->
+                            viewModel.onOptionActionClick(openScreen, listItem, action)
+                        }
+                    )
                 }
-            )
+            }
         }
     }
 }
 
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun Items(
-    items: List<Item>,
-    modifier: Modifier = Modifier,
-    onItemClick: (Item) -> Unit,
-    onPayClick: (Item) -> Unit
-) {
-    LazyColumn(
-        contentPadding = PaddingValues(bottom = 80.dp)
-    ) {
-        items(items, key = { it.id }) { listItem ->
-            AccountListItem(
-                item = listItem,
-                modifier = modifier
-                    .clickable {
-                        onItemClick(listItem)
-                    },
-                onPayClick = {
-                    onPayClick(listItem)
-                }
-            )
-        }
-    }
-}
 
 @Composable
 fun ChipSection(

@@ -22,7 +22,7 @@ import androidx.navigation.compose.*
 import com.francis.paywavee.common.snackbar.SnackbarManager
 import com.francis.paywavee.ui.screens.accountsList.AccountsListScreen
 import com.francis.paywavee.ui.screens.add_edit.AddEditScreen
-import com.francis.paywavee.ui.screens.custom_dialog.CustomDialog
+import com.francis.paywavee.ui.screens.accountsList.custom_dialog.CustomDialog
 import com.francis.paywavee.ui.screens.login.LoginScreen
 import com.francis.paywavee.ui.screens.settings.SettingsScreen
 import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
@@ -135,7 +135,7 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
     composable(PAY_ACCOUNTS) {
         AccountsListScreen(openScreen = { route -> appState.navigate(route) }){
             appState.navController
-                .navigate(PAY_DIALOG + "?entity=${it.entity}"+"?paybill=${it.payBill}"+"?account=${it.accountNumber}")
+                .navigate(PAY_DIALOG + "?entity=${it.entity}"+"?paybill=${it.payBill}"+"?phone=${it.phoneNumber}")
         }
     }
 
@@ -155,24 +155,22 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
     }
 
     dialog(
-        "$PAY_DIALOG?entity={entity}?paybill={paybill}?account={account}", arguments = listOf(
+        "$PAY_DIALOG?entity={entity}?paybill={paybill}?phone={phone}", arguments = listOf(
             navArgument("entity"){
                 type = NavType.StringType },
             navArgument("paybill"){
                 type = NavType.StringType },
-            navArgument("account"){
+            navArgument("phone"){
                 type = NavType.StringType }
         )){ navBackStackEntry ->
         val entity =   navBackStackEntry.arguments?.getString("entity")!!
         val paybill =   navBackStackEntry.arguments?.getString("paybill")!!
-        val account =   navBackStackEntry.arguments?.getString("account")!!
+        val phone =   navBackStackEntry.arguments?.getString("phone")!!
         CustomDialog(
             entity = entity,
             paybill = paybill,
-            account =account ,
-            onDismiss = { appState.navController.popBackStack()}) {
-
-        }
+            phone = phone ,
+            onDismiss = { appState.navController.popBackStack()})
     }
 }
 

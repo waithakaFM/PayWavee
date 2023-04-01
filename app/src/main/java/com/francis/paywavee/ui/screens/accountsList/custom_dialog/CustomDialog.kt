@@ -1,26 +1,29 @@
-package com.francis.paywavee.ui.screens.custom_dialog
+package com.francis.paywavee.ui.screens.accountsList.custom_dialog
 
-import android.content.Entity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.francis.paywavee.common.composable.NumberField
+import com.francis.paywavee.common.util.fieldModifier
+import com.francis.paywavee.R.string as AppText
 import com.francis.paywavee.ui.theme.Purple200
 import com.francis.paywavee.ui.theme.Purple700
 import com.francis.paywavee.ui.theme.white
@@ -31,10 +34,15 @@ import com.francis.paywavee.R.drawable as AppImage
 fun CustomDialog(
     entity: String,
     paybill:String,
-    account:String,
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    phone: String,
+    viewModel: PayDialogViewModel = hiltViewModel(),
+    onDismiss: () -> Unit
 ){
+    var transation by rememberSaveable {
+        mutableStateOf("")
+    }
+
+
     Dialog(
         onDismissRequest = {
             onDismiss()
@@ -69,25 +77,25 @@ fun CustomDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "PayBill")
-                        Text(text = paybill, fontWeight = FontWeight.SemiBold)
+                        Text(text = "Your number")
+                        Text(text = "+254$phone", fontWeight = FontWeight.SemiBold)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Account")
-                        Text(text = account, fontWeight = FontWeight.SemiBold)
+                        Text(text = "PayBill")
+                        Text(text = paybill, fontWeight = FontWeight.SemiBold)
                     }
                     Divider()
-                    var amount by remember {
-                        mutableStateOf("")
-                    }
-                    OutlinedTextField(
-                        value = amount,
-                        onValueChange = { amount = it }, modifier = Modifier.padding(8.dp),
-                        label = { Text("Amount") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    val fieldModifier = Modifier.fieldModifier()
+                    NumberField(
+                        text = AppText.amount,
+                        value = transation,
+                        onNewValue = {
+                                     transation = it
+                        },
+                        fieldModifier
                     )
 
                     Row(
@@ -135,8 +143,10 @@ fun CustomDialog(
                         )
                     }
                     Button(
+                        enabled = viewModel.isAmountEmpty(amount = transation),
                         onClick = {
-                            onConfirm()
+                            viewModel.onConfirm(phoneNumber = phone, amount = transation)
+                            onDismiss()
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Purple700,
