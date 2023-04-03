@@ -32,7 +32,7 @@ import com.francis.paywavee.R.drawable as AppImage
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomDialog(
-    entity: String,
+    category: String,
     paybill:String,
     phone: String,
     viewModel: PayDialogViewModel = hiltViewModel(),
@@ -65,7 +65,7 @@ fun CustomDialog(
                 verticalArrangement = Arrangement.spacedBy(25.dp)
             ) {
                 Text(
-                    text = "Make your payment to $entity",
+                    text = "Make your payment for $category",
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center
                 )

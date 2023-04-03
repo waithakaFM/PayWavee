@@ -27,3 +27,20 @@ val LightGreen3 = Color(0xff11d79b)
 val BlueViolet1 = Color(0xffaeb4fd)
 val BlueViolet2 = Color(0xff9fa5fe)
 val BlueViolet3 = Color(0xff8f98fd)
+
+
+// Bar chart
+val darkGray = Color(0xFF1a1717)
+val darkBlue = Color(0xFF18192b)
+val gray = Color(0xFF3F3F3F)
+val orange = Color(0xFFdb660d)
+val blueGray = Color(0xFF404352)
+val nightDark = Color(0xFF403757)
+
+val purple = Color(0xFF9b11ba)
+
+val redOrange = Color(0xFFe84a23)
+val green = Color(0xFF0ddb25)
+val blue = Color(0xFF140ddb)
+val brightBlue = Color(0xFF027cf5)
+

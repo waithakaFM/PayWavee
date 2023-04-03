@@ -135,7 +135,7 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
     composable(PAY_ACCOUNTS) {
         AccountsListScreen(openScreen = { route -> appState.navigate(route) }){
             appState.navController
-                .navigate(PAY_DIALOG + "?entity=${it.entity}"+"?paybill=${it.payBill}"+"?phone=${it.phoneNumber}")
+                .navigate(PAY_DIALOG + "?category=${it.category}"+"?paybill=${it.payBill}"+"?phone=${it.phoneNumber}")
         }
     }
 
@@ -155,19 +155,19 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
     }
 
     dialog(
-        "$PAY_DIALOG?entity={entity}?paybill={paybill}?phone={phone}", arguments = listOf(
-            navArgument("entity"){
+        "$PAY_DIALOG?category={category}?paybill={paybill}?phone={phone}", arguments = listOf(
+            navArgument("category"){
                 type = NavType.StringType },
             navArgument("paybill"){
                 type = NavType.StringType },
             navArgument("phone"){
                 type = NavType.StringType }
         )){ navBackStackEntry ->
-        val entity =   navBackStackEntry.arguments?.getString("entity")!!
+        val category =   navBackStackEntry.arguments?.getString("category")!!
         val paybill =   navBackStackEntry.arguments?.getString("paybill")!!
         val phone =   navBackStackEntry.arguments?.getString("phone")!!
         CustomDialog(
-            entity = entity,
+            category = category,
             paybill = paybill,
             phone = phone ,
             onDismiss = { appState.navController.popBackStack()})
