@@ -1,6 +1,7 @@
 package com.francis.paywavee.model.service.implimentation
 
 import com.francis.paywavee.model.Item
+import com.francis.paywavee.model.Transaction
 import com.francis.paywavee.model.service.services.AccountService
 import com.francis.paywavee.model.service.services.StorageService
 import com.francis.paywavee.model.service.trace
@@ -33,6 +34,14 @@ class StorageServiceImpl @Inject constructor(
             auth.currentUser.flatMapLatest { user ->
                 currentCollection(user.id)
                     .orderBy("entity")
+                    .snapshots()
+                    .map { snapshot -> snapshot.toObjects() }
+            }
+
+    override val transaction: Flow<List<Transaction>>
+        get() =
+            auth.currentUser.flatMapLatest { user ->
+                currentItemCollection(user.id)
                     .snapshots()
                     .map { snapshot -> snapshot.toObjects() }
             }
@@ -100,6 +109,28 @@ class StorageServiceImpl @Inject constructor(
         matchingTasks.map { it.reference.delete().asDeferred() }.awaitAll()
     }
 
+    override suspend fun saveTransaction(transaction: Transaction):String =
+    trace(SAVE_ITEM_TRACE) {
+        currentItemCollection(auth.currentUserId)
+            .add(transaction)
+            .await()
+            .id
+    }
+
+    override fun queryTransaction(category: String): Flow<List<Transaction>>{
+        return currentItemCollection(auth.currentUserId)
+            .whereEqualTo("category", category)
+            .snapshots()
+            .map { snapshot -> snapshot.toObjects() }
+    }
+
+    private fun currentItemCollection(userId: String): CollectionReference =
+        firestore.collection(USER_COLLECTION)
+            .document(userId)
+            .collection(TRANSACTION_COLLECTION)
+
+
+
 
     private fun currentCollection(uid: String): CollectionReference =
         firestore.collection(USER_COLLECTION)
@@ -109,6 +140,7 @@ class StorageServiceImpl @Inject constructor(
     companion object {
         private const val USER_COLLECTION = "users"
         private const val ITEM_COLLECTION = "items"
+        private const val TRANSACTION_COLLECTION = "transaction"
         private const val SAVE_ITEM_TRACE = "saveItem"
         private const val UPDATE_ITEM_TRACE = "updateItem"
     }

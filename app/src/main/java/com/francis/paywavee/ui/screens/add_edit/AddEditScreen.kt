@@ -45,10 +45,9 @@ fun AddEditScreen(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ActionToolbar(
+        ActionSaveToolbar(
             title = AppText.add_edit,
             modifier = Modifier.toolbarActions(),
-            endActionIcon = AppIcon.ic_save,
             endAction = {viewModel.onDoneClick(popUpScreen)}
         )
 

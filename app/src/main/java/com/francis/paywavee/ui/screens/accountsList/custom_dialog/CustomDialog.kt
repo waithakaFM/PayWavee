@@ -38,11 +38,13 @@ fun CustomDialog(
     viewModel: PayDialogViewModel = hiltViewModel(),
     onDismiss: () -> Unit
 ){
-    var transation by rememberSaveable {
+
+
+    val transaction by viewModel.transaction
+
+    var amount by remember{
         mutableStateOf("")
     }
-
-
     Dialog(
         onDismissRequest = {
             onDismiss()
@@ -78,7 +80,8 @@ fun CustomDialog(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(text = "Your number")
-                        Text(text = "+254$phone", fontWeight = FontWeight.SemiBold)
+                        Text(text = "+254$phone",
+                            fontWeight = FontWeight.SemiBold)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -91,9 +94,9 @@ fun CustomDialog(
                     val fieldModifier = Modifier.fieldModifier()
                     NumberField(
                         text = AppText.amount,
-                        value = transation,
+                        value = amount,
                         onNewValue = {
-                                     transation = it
+                                     amount = it
                         },
                         fieldModifier
                     )
@@ -143,9 +146,9 @@ fun CustomDialog(
                         )
                     }
                     Button(
-                        enabled = viewModel.isAmountEmpty(amount = transation),
+                        enabled = viewModel.isAmountEmpty(amount = transaction.amount.toString()),
                         onClick = {
-                            viewModel.onConfirm(phoneNumber = phone, amount = transation)
+                            viewModel.onConfirm(phoneNumber = phone,amount)
                             onDismiss()
                         },
                         colors = ButtonDefaults.buttonColors(

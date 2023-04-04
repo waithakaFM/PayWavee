@@ -56,7 +56,8 @@ class AddEditViewModel @Inject constructor(
             if (
                 editedItem.entity.isBlank() ||
                 editedItem.accountNumber.isBlank() ||
-                editedItem.phoneNumber.isBlank() || editedItem.accountNumber.isBlank()){
+                editedItem.phoneNumber.isBlank() ||
+                editedItem.accountNumber.isBlank()|| editedItem.category.isBlank()){
                 SnackbarManager.showMessage(R.string.empty_fields)
             }else {
                 if (editedItem.id.isBlank()){

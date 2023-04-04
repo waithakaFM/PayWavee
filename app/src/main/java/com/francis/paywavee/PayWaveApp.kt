@@ -17,16 +17,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.francis.paywavee.common.snackbar.SnackbarManager
 import com.francis.paywavee.ui.screens.accountsList.AccountsListScreen
 import com.francis.paywavee.ui.screens.add_edit.AddEditScreen
 import com.francis.paywavee.ui.screens.accountsList.custom_dialog.CustomDialog
+import com.francis.paywavee.ui.screens.add_edit.AddEditViewModel
 import com.francis.paywavee.ui.screens.login.LoginScreen
 import com.francis.paywavee.ui.screens.settings.SettingsScreen
 import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
 import com.francis.paywavee.ui.screens.spending.SpendingScreen
+import com.francis.paywavee.ui.screens.spending.SpendingViewModel
 import com.francis.paywavee.ui.screens.splash.SplashScreen
 import com.francis.paywavee.ui.theme.PayWaveeTheme
 import kotlinx.coroutines.CoroutineScope
@@ -151,7 +154,8 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
     }
 
     composable(SPENDING_SCREEN){
-        SpendingScreen()
+        val viewModel:SpendingViewModel = hiltViewModel()
+        SpendingScreen( viewModel)
     }
 
     dialog(

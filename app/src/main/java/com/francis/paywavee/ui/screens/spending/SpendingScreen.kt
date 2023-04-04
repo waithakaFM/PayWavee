@@ -1,9 +1,11 @@
 package com.francis.paywavee.ui.screens.spending
 
 import android.graphics.Paint
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
@@ -17,81 +19,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.francis.paywavee.ui.screens.add_edit.AddEditViewModel
 import com.francis.paywavee.ui.theme.*
 import kotlin.math.roundToInt
 
 @Composable
-fun SpendingScreen(){
+fun SpendingScreen(spendingViewModel: SpendingViewModel = hiltViewModel()){
     var showDescription by remember {
         mutableStateOf(false)
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(0.7f))
-            .padding(30.dp)
-        ,
-        contentAlignment = Alignment.TopCenter
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Text(
-                "Your monthly spending's",
-                fontWeight = FontWeight.Bold,
-                color = white,
-                fontSize = 30.sp,
-                textAlign = TextAlign.Center
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight(0.5f)
-            ) {
-                BarChart(
-                    listOf(
-                        BarchartInput(0,"Kotlin", orange),
-                        BarchartInput(0,"Swift", brightBlue),
-                        BarchartInput(1,"Ruby", green),
-                        BarchartInput(7,"Cobol", purple),
-                        BarchartInput(0,"C++", blueGray),
-                        BarchartInput(0,"C", redOrange),
-                        BarchartInput(7,"Cobol", purple),
-                        BarchartInput(0,"C++", blueGray),
-                        BarchartInput(0,"C", redOrange),
-                        BarchartInput(0,"Python", darkGray)
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    showDescription = showDescription
-                )
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text(
-                    "Show description",
-                    color = white,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Switch(
-                    checked = showDescription,
-                    onCheckedChange = {
-                        showDescription = it
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = orange,
-                        uncheckedThumbColor = white
-                    )
-                )
-            }
-        }
+    var shopping1 by remember{
+        mutableStateOf(0)
     }
+    val utilities = spendingViewModel.utilities.collectAsState(initial = emptyList()).value.sumOf { it.amount}.toFloat()
+    val food = spendingViewModel.food.collectAsState(initial = emptyList()).value.sumOf { it.amount}.toFloat()
+    val rent = spendingViewModel.rent.collectAsState(initial = emptyList()).value.sumOf { it.amount }.toFloat()
+    val cloths = spendingViewModel.cloths.collectAsState(initial = emptyList()).value.sumOf { it.amount}.toFloat()
+    val entertainment = spendingViewModel.entertainment.collectAsState(initial = emptyList()).value.sumOf { it.amount}.toFloat()
+    val shopping = spendingViewModel.shopping.collectAsState(initial = emptyList()).value.sumOf { it.amount}.toFloat()
+    val others = spendingViewModel.others.collectAsState(initial = emptyList()).value.sumOf { it.amount }.toFloat()
+
+    Log.d("Entertainment",others.toString())
+
+    val chartDetails = listOf(utilities,food,rent,cloths,entertainment,shopping,others)
+    val colors =  listOf(Color(0xFF58BDFF), Color(0xFF125B7F), Color(0xFF092D40), Color.Gray, Color.Green,
+        Color.Blue, Color.Red)
+    val chartLabel = listOf("utilities","food","rent","cloths","entertainment","shopping","others")
+
+
+
+    Box(modifier = Modifier.fillMaxSize()
+        .background(MaterialTheme.colors.background), contentAlignment = Alignment.Center) {
+        PieChart1(
+            chartDetails,
+            colors = colors,
+            chartLabel,
+            350.dp
+        )
+    }
+
+
 }
 
 @Composable
@@ -186,7 +155,7 @@ fun Bar(
             )
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
-                    "${(percentage*100).roundToInt()} %",
+                    "${(percentage*100).toInt()} %",
                     barWidth/5f,
                     height + 55f,
                     Paint().apply {
