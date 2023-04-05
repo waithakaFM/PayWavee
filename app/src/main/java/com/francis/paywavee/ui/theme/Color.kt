@@ -29,6 +29,7 @@ val BlueViolet2 = Color(0xff9fa5fe)
 val BlueViolet3 = Color(0xff8f98fd)
 
 
+
 // Bar chart
 val darkGray = Color(0xFF1a1717)
 val darkBlue = Color(0xFF18192b)
