@@ -18,13 +18,13 @@ It enable the user to make easily payment through M-Pesa without necessary havin
 
 # Tech Stacks and Open-Source Libraries
 
-[Firebase Authetication](https://firebase.google.com/docs/auth) - For user authetication and varidation.
-[Firestore](https://firebase.google.com/docs/storage) - for storage of data storage
-[MVVM architecture](https://developer.android.com/topic/architecture) - to flow best paractices
-[Jetpack Compose](https://developer.android.com/topic/architecture) - for rendering the UI
-[Dagger hilt](https://developer.android.com/training/dependency-injection/hilt-android) -for dependency Injection
-[Mpesa stk](https://github.com/Carrieukie/android_mpesa_stk) - to intiate MPESA STK push 
-[Daraja Api](https://developer.safaricom.co.ke/) - to facilitate payment services
+- [Firebase Authetication](https://firebase.google.com/docs/auth) - For user authetication and varidation.
+- [Firestore](https://firebase.google.com/docs/storage) - for storage of data storage
+- [MVVM architecture](https://developer.android.com/topic/architecture) - to flow best paractices
+- [Jetpack Compose](https://developer.android.com/topic/architecture) - for rendering the UI
+- [Dagger hilt](https://developer.android.com/training/dependency-injection/hilt-android) -for dependency Injection
+- [Mpesa stk](https://github.com/Carrieukie/android_mpesa_stk) - to intiate MPESA STK push 
+- [Daraja Api](https://developer.safaricom.co.ke/) - to facilitate payment services
 
 
 
