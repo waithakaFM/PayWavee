@@ -9,4 +9,20 @@ It enable the user to make easily payment through M-Pesa without necessary havin
 <div style="display:flex; flex-wrap: wrap; justify-content: center;">
   <img src="https://user-images.githubusercontent.com/92781552/225153446-b717aa54-05ea-4664-933f-51118adf5ab3.jpeg" style="width:300px; margin: 10px;" >
   <img src="https://user-images.githubusercontent.com/92781552/225153518-18b289d2-60f0-4f97-bb81-b1c4862f0f36.jpeg" style="width:300px; margin: 10px;">
+  <img src="https://user-images.githubusercontent.com/92781552/230595893-cfaa3d9f-2d4c-4d53-aeee-d1962564f77f.jpeg" style="width:300px; margin: 10px;" >
+  <img src="https://user-images.githubusercontent.com/92781552/230595946-6d037583-d89d-44a0-b544-acdc6b90b27b.jpeg" style="width:300px; margin: 10px;">
+  
+  <img src="https://user-images.githubusercontent.com/92781552/225153446-b717aa54-05ea-4664-933f-51118adf5ab3.jpeg" style="width:300px; margin: 10px;" >
+  <img src="https://user-images.githubusercontent.com/92781552/225153518-18b289d2-60f0-4f97-bb81-b1c4862f0f36.jpeg" style="width:300px; margin: 10px;">
+  <img src="https://user-images.githubusercontent.com/92781552/225153446-b717aa54-05ea-4664-933f-51118adf5ab3.jpeg" style="width:300px; margin: 10px;" >
+  <img src="https://user-images.githubusercontent.com/92781552/225153518-18b289d2-60f0-4f97-bb81-b1c4862f0f36.jpeg" style="width:300px; margin: 10px;">
 </div>
+
+
+![home](https://user-images.githubusercontent.com/92781552/230595893-cfaa3d9f-2d4c-4d53-aeee-d1962564f77f.jpeg)
+![drop_down](https://user-images.githubusercontent.com/92781552/230595946-6d037583-d89d-44a0-b544-acdc6b90b27b.jpeg)
+![payee](https://user-images.githubuserco
+![add_edit](https://user-images.githubusercontent.com/92781552/230595982-767c3365-029b-406a
+![spending](https://user-images.githubusercontent.com/92781552/230596003-cfdb15cf-1fd0-46d1-947e-baea6b165d53.jpeg)
+-abfc-bdf3fede5053.jpeg)
+ntent.com/92781552/230595965-a0ed7b31-7944-44bc-a5f2-980b85037d73.jpeg)
