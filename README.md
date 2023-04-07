@@ -15,3 +15,16 @@ It enable the user to make easily payment through M-Pesa without necessary havin
   <img src="https://user-images.githubusercontent.com/92781552/230596978-6d234980-31b2-425d-9455-30c4066c870a.jpeg" style="width:300px; margin: 10px;" >
   <img src="https://user-images.githubusercontent.com/92781552/230596003-cfdb15cf-1fd0-46d1-947e-baea6b165d53.jpeg" style="width:300px; margin: 10px;">
 </div>
+
+# Tech Stacks and Open-Source Libraries
+
+[Firebase Authetication](https://firebase.google.com/docs/auth) - For user authetication and varidation.
+[Firestore](https://firebase.google.com/docs/storage) - for storage of data storage
+[MVVM architecture](https://developer.android.com/topic/architecture) - to flow best paractices
+[Jetpack Compose](https://developer.android.com/topic/architecture) - for rendering the UI
+[Dagger hilt](https://developer.android.com/training/dependency-injection/hilt-android) -for dependency Injection
+[Mpesa stk](https://github.com/Carrieukie/android_mpesa_stk) - to intiate MPESA STK push 
+[Daraja Api](https://developer.safaricom.co.ke/) - to facilitate payment services
+
+
+
