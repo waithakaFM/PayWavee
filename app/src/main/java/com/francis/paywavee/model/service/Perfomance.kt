@@ -1,4 +1,4 @@
-package com.francis.paywavee.model
+package com.francis.paywavee.model.service
 
 import com.google.firebase.perf.ktx.trace
 import com.google.firebase.perf.metrics.Trace

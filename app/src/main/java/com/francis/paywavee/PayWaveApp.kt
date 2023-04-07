@@ -1,28 +1,38 @@
 package com.francis.paywavee
 
 import android.content.res.Resources
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.*
+import androidx.navigation.compose.*
 import com.francis.paywavee.common.snackbar.SnackbarManager
 import com.francis.paywavee.ui.screens.accountsList.AccountsListScreen
+import com.francis.paywavee.ui.screens.add_edit.AddEditScreen
+import com.francis.paywavee.ui.screens.accountsList.custom_dialog.CustomDialog
+import com.francis.paywavee.ui.screens.add_edit.AddEditViewModel
 import com.francis.paywavee.ui.screens.login.LoginScreen
 import com.francis.paywavee.ui.screens.settings.SettingsScreen
 import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
+import com.francis.paywavee.ui.screens.spending.SpendingScreen
+import com.francis.paywavee.ui.screens.spending.SpendingViewModel
 import com.francis.paywavee.ui.screens.splash.SplashScreen
+import com.francis.paywavee.ui.theme.ButtonBlue
+import com.francis.paywavee.ui.theme.DarkerButtonBlue
 import com.francis.paywavee.ui.theme.PayWaveeTheme
 import kotlinx.coroutines.CoroutineScope
 
@@ -45,6 +55,31 @@ fun PayWaveApp() {
                             Snackbar(snackbarData, contentColor = MaterialTheme.colors.onPrimary)
                         }
                     )
+                },
+                bottomBar = {
+                            BottomNavBar(
+                                items = listOf(
+                                    BottomNavItem(
+                                        name = "Pay",
+                                        route = PAY_ACCOUNTS,
+                                        icon = painterResource(id = R.drawable.ic_account)
+                                    ),
+                                    BottomNavItem(
+                                        name = "Add",
+                                        route = "$ADD_EDIT$ITEM_ID_ARG",
+                                        icon = painterResource(id = R.drawable.ic_add_edit)
+                                    ),
+                                    BottomNavItem(
+                                        name = "Spending",
+                                        route = SPENDING_SCREEN,
+                                        icon = painterResource(id = R.drawable.ic_spendings)
+                                    ),
+                                ),
+                                navController = appState.navController,
+                                onItemClick = {
+                                    appState.navController.navigate(it.route)
+                                }
+                            )
                 },
                 scaffoldState = appState.scaffoldState
 
@@ -82,6 +117,7 @@ fun resources(): Resources {
 
 @ExperimentalMaterialApi
 fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
+    
     composable(SPLASH_SCREEN) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
@@ -101,6 +137,89 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
         SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
-    composable(PAY_ACCOUNTS) { AccountsListScreen(openScreen = { route -> appState.navigate(route) }) }
+    composable(PAY_ACCOUNTS) {
+        AccountsListScreen(openScreen = { route -> appState.navigate(route) }){
+            appState.navController
+                .navigate(PAY_DIALOG + "?category=${it.category}"+"?paybill=${it.payBill}"+"?phone=${it.phoneNumber}")
+        }
+    }
 
+
+    composable(
+        route = "$ADD_EDIT$ITEM_ID_ARG",
+        arguments = listOf(navArgument(ITEM_ID) { defaultValue = ITEM_DEFAULT_ID })
+    ) {
+        AddEditScreen(
+            popUpScreen = { appState.popUp() },
+            itemId = it.arguments?.getString(ITEM_ID) ?: ITEM_DEFAULT_ID
+        )
+    }
+
+    composable(SPENDING_SCREEN){
+        val viewModel:SpendingViewModel = hiltViewModel()
+        SpendingScreen(
+            viewModel,
+            popUpScreen = { appState.popUp() }
+        )
+    }
+
+    dialog(
+        "$PAY_DIALOG?category={category}?paybill={paybill}?phone={phone}", arguments = listOf(
+            navArgument("category"){
+                type = NavType.StringType },
+            navArgument("paybill"){
+                type = NavType.StringType },
+            navArgument("phone"){
+                type = NavType.StringType }
+        )){ navBackStackEntry ->
+        val category =   navBackStackEntry.arguments?.getString("category")!!
+        val paybill =   navBackStackEntry.arguments?.getString("paybill")!!
+        val phone =   navBackStackEntry.arguments?.getString("phone")!!
+        CustomDialog(
+            category = category,
+            paybill = paybill,
+            phone = phone ,
+            onDismiss = { appState.navController.popBackStack()})
+    }
+}
+
+@Composable
+fun BottomNavBar(
+    items: List<BottomNavItem>,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavItem) -> Unit
+){
+    val backStackEntry = navController.currentBackStackEntryAsState()
+
+    BottomNavigation(
+        modifier = modifier,
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 5.dp
+    ) {
+        items.forEach{ item ->
+            val selected = item.route == backStackEntry.value?.destination?.route
+            BottomNavigationItem(
+                selected = selected,
+                onClick = {onItemClick(item)},
+                selectedContentColor = ButtonBlue,
+                unselectedContentColor = DarkerButtonBlue,
+                icon = {
+                    Column(horizontalAlignment = CenterHorizontally) {
+                        Icon(
+                            painter = item.icon,
+                            contentDescription = item.name,
+                        )
+                        if (selected){
+                            Text(
+                                text = item.name,
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp
+                            )
+                        }
+                    }
+                }
+            )
+        }
+    }
 }
