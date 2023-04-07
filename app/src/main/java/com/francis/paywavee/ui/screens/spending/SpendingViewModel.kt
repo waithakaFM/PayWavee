@@ -21,4 +21,8 @@ class SpendingViewModel @Inject constructor(
     val shopping = storageService.queryTransaction("Shopping")
     val others = storageService.queryTransaction("Others")
 
+    fun onBackClick( popUpScreen: () -> Unit){
+        popUpScreen()
+    }
+
 }

@@ -18,11 +18,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class PayDialogViewModel@Inject constructor(
+class PayDialogViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
     savedStateHandle: SavedStateHandle
-):  PayWaveViewModel(logService) {
+) : PayWaveViewModel(logService) {
     var isButtonEnabled by mutableStateOf(false)
 
     val transaction = mutableStateOf(Transaction())
@@ -32,28 +32,28 @@ class PayDialogViewModel@Inject constructor(
         transaction.value = transaction.value.copy(category = itemCategory)
     }
 
-    fun onAmountChange(newValue: String){
+    fun onAmountChange(newValue: String) {
         transaction.value = transaction.value.copy(amount = newValue.toInt())
     }
 
 
-    fun isAmountEmpty(amount: String): Boolean{
+    fun isAmountEmpty(amount: String): Boolean {
         isButtonEnabled = amount.isNotEmpty()
         return isButtonEnabled
     }
 
-    fun onConfirm(phoneNumber: String,amount: String) {
-        launchCatching {
-            val addTransaction = transaction.value.copy(
-                amount = amount.toInt()
+    fun onConfirm(phoneNumber: String, amount: String) {
+        val addTransaction = transaction.value.copy(
+            amount = amount.toInt()
+        )
+        if (addTransaction.amount.toString().isNotEmpty()) {
+            darajaDriver.performStkPush(
+                stkPushRequest = darajaSTK(phoneNumber, amount)
             )
-            if (addTransaction.amount.toString().isNotEmpty()) {
-                darajaDriver.performStkPush(
-                    stkPushRequest = darajaSTK(phoneNumber, amount)
-                )
+            launchCatching {
                 storageService.saveTransaction(addTransaction)
-                SnackbarManager.showMessage(R.string.enter_pin)
             }
+            SnackbarManager.showMessage(R.string.enter_pin)
         }
     }
 }

@@ -31,6 +31,8 @@ import com.francis.paywavee.ui.screens.sign_up.SignUpScreen
 import com.francis.paywavee.ui.screens.spending.SpendingScreen
 import com.francis.paywavee.ui.screens.spending.SpendingViewModel
 import com.francis.paywavee.ui.screens.splash.SplashScreen
+import com.francis.paywavee.ui.theme.ButtonBlue
+import com.francis.paywavee.ui.theme.DarkerButtonBlue
 import com.francis.paywavee.ui.theme.PayWaveeTheme
 import kotlinx.coroutines.CoroutineScope
 
@@ -155,7 +157,10 @@ fun NavGraphBuilder.payWaveGraph(appState: PayWaveAppState) {
 
     composable(SPENDING_SCREEN){
         val viewModel:SpendingViewModel = hiltViewModel()
-        SpendingScreen( viewModel)
+        SpendingScreen(
+            viewModel,
+            popUpScreen = { appState.popUp() }
+        )
     }
 
     dialog(
@@ -189,7 +194,7 @@ fun BottomNavBar(
 
     BottomNavigation(
         modifier = modifier,
-        backgroundColor = Color.DarkGray,
+        backgroundColor = MaterialTheme.colors.background,
         elevation = 5.dp
     ) {
         items.forEach{ item ->
@@ -197,8 +202,8 @@ fun BottomNavBar(
             BottomNavigationItem(
                 selected = selected,
                 onClick = {onItemClick(item)},
-                selectedContentColor = Color.Green,
-                unselectedContentColor = Color.Gray,
+                selectedContentColor = ButtonBlue,
+                unselectedContentColor = DarkerButtonBlue,
                 icon = {
                     Column(horizontalAlignment = CenterHorizontally) {
                         Icon(
@@ -209,7 +214,7 @@ fun BottomNavBar(
                             Text(
                                 text = item.name,
                                 textAlign = TextAlign.Center,
-                                fontSize = 10.sp
+                                fontSize = 15.sp
                             )
                         }
                     }
